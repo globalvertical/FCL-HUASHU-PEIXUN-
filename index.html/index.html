@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOBAL-VERTICAL · 中澳FCL话术智库 V6</title>
+<style>
+:root{
+  --bg:#faf9f7;
+  --panel:#ffffff;
+  --gold:#c9a96e;
+  --gold-dark:#a68347;
+  --ink:#1a1a1a;
+  --ink-light:#6b6b6b;
+  --line:#f0ede8;
+  --shadow:0 12px 40px rgba(0,0,0,0.03);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","PingFang SC",sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  display:flex;
+  min-height:100vh;
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* 左侧导航 */
+#sidebar{
+  width:320px;
+  min-width:320px;
+  background:var(--panel);
+  border-right:1px solid var(--line);
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+.brand{padding:40px 32px 30px; border-bottom:1px solid var(--line);}
+.brand h1{font-family:"Times New Roman",Georgia,serif; font-size:24px; letter-spacing:2px; font-weight:400; text-transform:uppercase;}
+.brand span{display:block; margin-top:8px; font-size:11px; letter-spacing:4px; color:var(--gold); text-transform:uppercase;}
+#sidebar nav{flex:1; overflow-y:auto; padding:20px 0 40px;}
+.nav-item{
+  display:flex; align-items:center; gap:16px; padding:16px 32px; cursor:pointer;
+  font-size:15px; color:var(--ink-light); border-left:3px solid transparent; transition:all 0.3s ease;
+}
+.nav-item:hover{background:#fdfcfb; color:var(--ink); padding-left:36px;}
+.nav-item.active{border-left-color:var(--gold); color:var(--ink); background:#fdfcfb; font-weight:600;}
+.nav-item .idx{font-family:"Times New Roman",serif; font-size:14px; color:var(--gold); width:24px; text-align:right;}
+.nav-item .cn{font-size:12px; color:#999; margin-left:auto; font-weight:400;}
+
+/* 右侧主区域 */
+#main{flex:1; min-width:0; display:flex; flex-direction:column;}
+
+/* 顶部变量 */
+#topbar{
+  padding:30px 48px; background:rgba(255,255,255,0.95); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line); display:flex; flex-wrap:wrap; gap:20px 32px;
+  align-items:flex-end; position:sticky; top:0; z-index:15;
+}
+.field{display:flex; flex-direction:column; gap:8px;}
+.field label{font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gold-dark); font-weight:600;}
+.field input{
+  border:none; border-bottom:1px solid var(--line); background:transparent;
+  padding:8px 0; font-size:16px; color:var(--ink); width:160px; outline:none; transition:border 0.3s;
+}
+.field input:focus{border-bottom-color:var(--gold);}
+.field input::placeholder{color:#ccc;}
+
+/* 角色切换 */
+#rolebar{
+  padding:20px 48px; background:#fffdfa; border-bottom:1px solid var(--line);
+  display:flex; flex-wrap:wrap; gap:12px; align-items:center;
+}
+.pill{
+  border:1px solid var(--line); background:var(--panel); padding:10px 24px; font-size:14px;
+  cursor:pointer; color:var(--ink-light); transition:all 0.3s; border-radius:4px;
+}
+.pill:hover{border-color:var(--gold);}
+.pill.on{background:var(--ink); color:#fff; border-color:var(--ink); box-shadow:0 6px 16px rgba(0,0,0,0.1);}
+.role-label{font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#bbb; margin-right:8px; font-weight:600;}
+
+/* 话术区 */
+#stage{padding:40px 48px; flex:1; max-width:1300px;}
+.scene-block{margin-bottom:70px;}
+.scene-head{
+  display:flex; align-items:baseline; gap:16px; margin-bottom:24px;
+  padding-bottom:16px; border-bottom:1px solid var(--line); flex-wrap:wrap;
+}
+.scene-head .sn{font-family:"Times New Roman",serif; font-size:18px; color:var(--gold); letter-spacing:1px;}
+.scene-head h3{font-size:20px; font-weight:600;}
+.scene-head .usage{font-size:13px; color:#999; margin-left:auto; font-style:italic; max-width:500px; line-height:1.5;}
+
+.card{
+  background:var(--panel); border:1px solid var(--line); padding:32px; margin-bottom:24px;
+  border-radius:6px; transition:all 0.3s ease; position:relative; box-shadow:var(--shadow);
+}
+.card:hover{border-color:var(--gold); transform:translateY(-2px); box-shadow:0 20px 50px rgba(0,0,0,0.06);}
+.card .meta{display:flex; gap:12px; margin-bottom:16px;}
+.tag{
+  font-size:10px; letter-spacing:1px; text-transform:uppercase; padding:4px 12px;
+  border:1px solid var(--line); color:#999; border-radius:20px; font-weight:600;
+}
+.tag.gold{border-color:var(--gold); color:var(--gold-dark);}
+.tag.dark{background:var(--ink); color:#fff; border-color:var(--ink);}
+
+.en{font-size:17px; line-height:1.85; color:var(--ink); margin-bottom:16px; white-space:pre-wrap; word-break:break-word;}
+.en .wa-bold{font-weight:700; color:#000;}
+.en .var{background:#fdf6e8; padding:0 4px; color:#a67c00; font-weight:600; border-radius:2px;}
+
+.zh{font-size:14px; line-height:1.8; color:#777; padding-top:16px; border-top:1px solid #f5f5f5; white-space:pre-wrap;}
+
+.copy-btn{
+  position:absolute; top:28px; right:28px; border:1px solid var(--line); background:var(--panel);
+  padding:8px 16px; font-size:11px; letter-spacing:1px; cursor:pointer; color:var(--ink-light);
+  opacity:0; transition:all 0.3s; border-radius:4px;
+}
+.card:hover .copy-btn{opacity:1;}
+.copy-btn:hover{border-color:var(--gold); color:var(--gold-dark);}
+.copy-btn.ok{background:var(--ink); color:#fff; border-color:var(--ink); opacity:1;}
+
+.scene-divider{margin:40px 0 16px; font-size:15px; font-weight:600; color:var(--gold-dark); letter-spacing:1px;}
+.scene-usage{font-size:13px; color:#999; margin-bottom:24px; line-height:1.6;}
+
+@media(max-width:980px){
+  body{flex-direction:column;}
+  #sidebar{width:100%; min-width:0; height:auto; position:relative; max-height:300px;}
+  #sidebar nav{display:flex; flex-wrap:wrap; padding:10px; gap:6px;}
+  .nav-item{padding:10px 16px; border-left:none; border-bottom:3px solid transparent; font-size:14px;}
+  .nav-item.active{border-left:none; border-bottom-color:var(--gold);}
+  #topbar{padding:20px;}
+  .field input{width:130px;}
+  #stage{padding:24px 20px;}
+  .card{padding:24px;}
+  .en{font-size:16px;}
+}
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="brand">
+    <h1>Global·Vertical</h1>
+    <span>China–Australia FCL Desk</span>
+  </div>
+  <nav id="navList"></nav>
+</aside>
+
+<div id="main">
+  <div id="topbar">
+    <div class="field"><label>Client Name</label><input id="v-client" placeholder="e.g. Kevin" oninput="renderAll()"></div>
+    <div class="field"><label>Your Name</label><input id="v-me" placeholder="e.g. Jean" oninput="renderAll()"></div>
+    <div class="field"><label>Origin</label><input id="v-origin" placeholder="e.g. Qingdao" oninput="renderAll()"></div>
+    <div class="field"><label>Destination</label><input id="v-dest" placeholder="e.g. Fremantle" oninput="renderAll()"></div>
+    <div class="field"><label>Container</label><input id="v-ctr" placeholder="e.g. 40HQ" oninput="renderAll()"></div>
+    <div class="field"><label>Commodity</label><input id="v-cargo" placeholder="e.g. furniture" oninput="renderAll()"></div>
+  </div>
+
+  <div id="rolebar">
+    <span class="role-label">Gender</span>
+    <div class="pill" data-role="male" onclick="setRole('male')">男业务 · Male</div>
+    <div class="pill on" data-role="female" onclick="setRole('female')">女业务 · Female</div>
+    <span class="role-label" style="margin-left:24px;">Client</span>
+    <div class="pill on" data-type="personal" onclick="setType('personal')">散客 · Personal</div>
+    <div class="pill" data-type="business" onclick="setType('business')">商业 · Business</div>
+  </div>
+
+  <div id="stage"></div>
+</div>
+
+<script>
+/* ============================================================
+   V6 优化版：深度重构【SOP 01 破冰招呼】
+   将首句拆分为两步：
+   第一步：纯自我介绍（亮明身份、公司背景、11年优势）。
+   第二步：根据客户是否给了信息，进行针对性的引导提问。
+   ============================================================ */
+
+const SOP = [
+{
+  id:"s1", cn:"破冰招呼", en:"Icebreaker",
+  desc:"首条回复拆分为两段发送：先亮明专业身份，再引导客户提供关键信息",
+  scenes:[
+    {
+      name:"第一步：发送自我介绍（说明职能范畴、公司经验与优势）",
+      usage:"无论客户发什么，第一步先破冰并亮出身份，建立专业信任感。",
+      lines:[
+        {role:"male", type:"business", en:"Hey *{{client}}*, {{me}} here from *Global-Vertical*.\nWe are a dedicated China-Australia FCL forwarder with 11 years of experience. We handle door-to-door and port-to-port daily, giving our clients full control and zero guesswork.", zh:"【男/商业】第一段纯介绍。展现自信与专业性，强调“11年经验、门到门/港到港日常操作”。"},
+        {role:"male", type:"personal", en:"Hi *{{client}}*, {{me}} from *Global-Vertical*.\nWe specialize in door-to-door shipping from China to Australia. With 11 years in the business, we make sure your cargo arrives safely and on time, without the usual headaches.", zh:"【男/散客】第一段纯介绍。强调“专注中澳门到门、11年经验、省心”。"},
+        {role:"female", type:"business", en:"Hello *{{client}}*, it's lovely to meet you — I'm {{me}} from *Global-Vertical*.\nWe've been focusing exclusively on the China-Australia trade lane for 11 years. We handle the entire supply chain, from factory pickup in China to final delivery in Australia, so you only need one point of contact.", zh:"【女/商业】第一段纯介绍。用“lovely to meet you”展现人情味，点出“11年专线、全链条服务、只需对接一个人”。"},
+        {role:"female", type:"personal", en:"Hi *{{client}}*, {{me}} here from *Global-Vertical*. Thank you for reaching out!\nWe are specialists in getting cargo safely from China to Australia. We've been doing this for 11 years, so you're in very good hands. We take care of the heavy lifting so you don't have to.", zh:"【女/散客】第一段纯介绍。用“thank you for reaching out”提供情绪价值，强调“交给我们你可以放心”。"}
+      ]
+    },
+    {
+      name:"第二步（场景A）：客户已提供城市/柜型，引导下一步",
+      usage:"基于客户提供的内容，立刻追问核心细节（如货物、时效），展现高效。",
+      lines:[
+        {role:"male", type:"business", en:"I noticed you've got a *{{ctr}}* sitting in *{{origin}}* heading to *{{dest}}* — that's exactly the kind of lane we run daily.\nTo give you the most accurate rate, is the cargo *ready to load now*, or are we still waiting on the factory?", zh:"【男/商业】基于客户提供的信息直接切入。用“ready to load”问题展现极高的业务熟练度。"},
+        {role:"male", type:"personal", en:"Saw your *{{ctr}}* in *{{origin}}* to *{{dest}}* — we handle this route every day.\nJust so I don't send you a generic number: roughly *when do you need it to arrive*? That helps me narrow the best options for you.", zh:"【男/散客】基于客户信息。问期望到达时间，把报价变成定制动作。"},
+        {role:"female", type:"business", en:"I noticed you mentioned *{{origin}}* to *{{dest}}* with a *{{ctr}}*.\nBefore I start pulling numbers, would you mind if I asked what the cargo is? I only ask because *some items* need a bit more attention with Australian biosecurity. Is that okay?", zh:"【女/商业】基于客户信息。用“would you mind”展现委婉，用“biosecurity”展现专业。结尾强制判断题。"},
+        {role:"female", type:"personal", en:"I see you're looking at a *{{ctr}}* to *{{dest}}*.\nI don't want to overwhelm you with questions, but just so I know how much detail to give you: is this your *first time* bringing something in from overseas?", zh:"【女/散客】基于客户信息。用“don't want to overwhelm you”展现体贴。结尾判断题。"}
+      ]
+    },
+    {
+      name:"第二步（场景B）：客户未提供信息，引导提供起运/目的港",
+      usage:"客户只问了价格，但没有给具体信息。用专业理由（为了精准报价）自信地要求客户提供。",
+      lines:[
+        {role:"male", type:"business", en:"You asked for rates, but a generic number won't help your bottom line — port charges change drastically depending on location.\nGive me your *origin city* and *destination port*, and I'll send a precise breakdown within the hour. Deal?", zh:"【男/商业】用“generic number won't help your bottom line”展现专业负责。用“Deal?”强推客户回复起运/目的港。"},
+        {role:"male", type:"personal", en:"You asked for a price, but to give you a *real* number instead of a fake teaser, I need to know where in China you're loading and where in Australia it's going.\nCan you share those *two cities* so I can build a real quote for you?", zh:"【男/散客】用“real number vs fake teaser”建立信任，直接索要两个城市。"},
+        {role:"female", type:"business", en:"You asked about rates, but I really don't want to send you a ballpark figure that might change later due to port differences.\nWould you mind sharing your *origin* and *destination*? Then I can give you a precise, honest breakdown. Would that work for you?", zh:"【女/商业】用“don't want to send a ballpark figure”展现同理心。结尾委婉判断题。“"},
+        {role:"female", type:"personal", en:"You asked for a price, but every port has different fees. If you don't mind sharing which *city* you're shipping from and to, I can get you a real quote instead of a guess.\nWould it be okay if I asked for those two cities?", zh:"【女/散客】用“instead of a guess”展现负责态度。结尾极致委婉的判断题。"}
+      ]
+    },
+    {
+      name:"其他补充：自动回复后的人工接管",
+      usage:"真人接管对话，温和破冰，带入公司背景，引导客户说出缺失的信息。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, {{me}} here from *Global-Vertical*, taking over from the auto-reply.\nWe're a China-Australia FCL specialist with 11 years in the business. The auto-reply doesn't know your details. To get this moving and give you an accurate quote, what's the *origin city* and *destination*?", zh:"【男/商业】直接接管，亮明身份。跳过寒暄，直接索要起运地/目的地。"},
+        {role:"female", type:"personal", en:"Hi *{{client}}*, I'm {{me}} from *Global-Vertical* — apologies for the robot!\nWe specialize exclusively in door-to-door shipping from China to Australia, with 11 years of experience. I'm ready to help you figure this out, but I just need to know where it's leaving from and where it's heading.\nCould you share those *two cities* with me?", zh:"【女/散客】用“apologies for the robot!”展现俏皮。强调“11年经验”。结尾判断题：“能不能告诉我这两个城市？”"}
+      ]
+    }
+  ]
+},
+{
+  id:"s2", cn:"客户画像分析", en:"Profiling",
+  desc:"通过轻问题判断：散客自用 vs 商业进口、经验层级、决策速度",
+  scenes:[
+    {
+      name:"Scene 2-A · 判断“散客自用” vs “商业进口”",
+      usage:"客户信息模糊，需用自然方式区分自用与商业用途。",
+      lines:[
+        {role:"male", type:"personal", en:"Quick one *{{client}}* — is this *{{cargo}}* for your own use, or are you bringing it in to sell?\nNo wrong answer; it just changes whether I should be quoting you *DDP* or a leaner *port-to-port* setup.", zh:"【男/散客】用“no wrong answer”消除压力。"},
+        {role:"male", type:"business", en:"So I can tailor this properly, *{{client}}* — are you the *importer of record* on this *{{ctr}}*, or is there a trading company behind it?\nAsking because commercial consignments sometimes need different customs treatment.", zh:"【男/商业】用准确术语建立专业门槛。"},
+        {role:"female", type:"business", en:"Hi *{{client}}*, I want to make sure I'm giving you the most relevant advice. Would you mind clarifying if this shipment is for a *business you run*, or a one-off personal import?\nThe reason I ask is that the *GST and duty* treatments can be slightly different. Would you be open to sharing that with me?", zh:"【女/商业】展现极强的服务意识。结尾判断题：“愿不愿意跟我分享一下？”"},
+        {role:"female", type:"personal", en:"*{{client}}*, just so I don't overcomplicate things for you — are you handling the Australian side yourself, or would you rather someone just *took it door to door* for you?\nI just don't want to send you a quote filled with services you don't actually need. Is it safe for me to assume you'd prefer the more hands-off approach?", zh:"【女/散客】展现温柔。结尾判断题：“是不是更倾向于全包？”"}
+      ]
+    },
+    {
+      name:"Scene 2-B · 探测客户经验层级",
+      usage:"决定是否需要在后续对话中解释基础概念。",
+      lines:[
+        {role:"male", type:"personal", en:"Just checking, *{{client}}* — is this your *first rodeo* with importing into Australia?\nIf yes, I'll walk you through the *DAFF biosecurity* side step by step. If you've done it before, I'll shut up and just send numbers.", zh:"【男/散客】用“first rodeo”拉近距离。"},
+        {role:"male", type:"business", en:"*{{client}}*, have you shipped *{{cargo}}* into *{{dest}}* before?\nIf it's your first time on this lane, I want to flag the *congestion patterns* early so your warehouse plan isn't built on a fantasy transit time.", zh:"【男/商业】点出港口特殊性。"},
+        {role:"female", type:"business", en:"Hi *{{client}}*, I always like to ask this before we start: have you handled imports into Australia before, or is this a new experience for you?\nThere's absolutely no judgment either way — I just want to know how much detail you'd like from me. Would you prefer I keep it short and just give you the numbers?", zh:"【女/商业】用“no judgment”展现情商。结尾判断题：“需不需要我保持简短？”"},
+        {role:"female", type:"personal", en:"*{{client}}*, quick question — have you imported anything into Australia before?\nI only ask because the *DAFF inspection* process can feel a bit like a black box the first time around. If it's new to you, I'd be more than happy to walk you through it. Would that be helpful for you?", zh:"【女/散客】精准共情新手恐惧。结尾判断题：“需要我提前给你讲讲吗？”"}
+      ]
+    }
+  ]
+},
+{
+  id:"s3", cn:"需求挖掘", en:"Discovery",
+  desc:"围绕 5 种服务类型索取关键信息",
+  scenes:[
+    {
+      name:"Scene 3-A · 客户要“门到门 DDP”，但信息不全",
+      usage:"需要一次性把关键变量问全。",
+      lines:[
+        {role:"male", type:"personal", en:"*{{client}}*, DDP is our most popular option — but to give you a *real* number rather than a teaser, I need three things:\n1) the *postcode* at the destination\n2) a one-line description of the cargo\n3) whether the price needs to include *GST and duty*.\nSend those and I'll have something usable for you.", zh:"【男/散客】用编号列表结构化信息请求。"},
+        {role:"male", type:"business", en:"*{{client}}*, DDP makes sense — one number, no surprises at destination. But I can't build it on guesses.\nI'll need: *destination postcode*, *cargo description*, and whether you want *duty and GST included* or handled separately.\nSend what you have and I'll start the structure.", zh:"【男/商业】降低一次性提供全部信息的压力。"},
+        {role:"female", type:"business", en:"Happy to work on DDP for you, *{{client}}*. It's a wonderfully stress-free option.\nTo price it properly, I just need to understand the *customs profile* a little better. Is the cargo *duty-free*, and does your destination postcode fall into a *remote WA zone*?\nWould you mind if I checked those details with you before I put the numbers together?", zh:"【女/商业】提供情绪价值，极度委婉。结尾判断题：“介不介意我先和你核对一下？”"},
+        {role:"female", type:"personal", en:"*{{client}}*, DDP is a lovely choice if you just want to *forget the shipment exists* until it arrives at your door.\nBut I don't want to give you a blind estimate. Could you possibly send me the *destination postcode* and a quick note on what the goods are?\nOnce I have those two little things, I can put together a full breakdown. Is that alright?", zh:"【女/散客】把 DDP 翻译成情绪价值。结尾判断题：“这样安排可以吗？”"}
+      ]
+    },
+    {
+      name:"Scene 3-B · 客户指定 P2P / 港到港",
+      usage:"需确认真实需求，但不硬推。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, P2P is clean and transparent — I like it.\nJust confirm one thing for me: you'll handle *{{dest}} clearance and trucking* on your side, correct?\nIf there's any chance you'd rather have us collect it from the wharf, say the word.", zh:"【男/商业】轻轻打开 P2D 的可能性。"},
+        {role:"female", type:"personal", en:"P2P works perfectly, *{{client}}*. It's a great way to keep costs down.\nI just want to make sure you aren't underestimating the *destination charges* on the Australian side. Sometimes THC and empty-return fees can catch people by surprise.\nWould it be helpful if I sent you a little *side-by-side* comparison of P2P versus DDP?", zh:"【女/散客】善意提醒。结尾判断题：“需要我发一份对比说明给你看吗？”"},
+        {role:"female", type:"business", en:"*{{client}}*, P2P is a very solid choice if you have your own broker and trucking sorted.\nI just want to be thorough: does your broker cover the *port charges and DAFF liaison*, or just the customs clearance? It's a very common gap.\nWould you like me to quickly check if there's any potential gap on your end?", zh:"【女/商业】展现共情。结尾判断题：“需不需要我帮你快速排查一下盲区？”"}
+      ]
+    },
+    {
+      name:"Scene 3-C · 客户提到“多个供应商 / 集货”",
+      usage:"判断是否能做集货，以及集货能节省什么。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, if your *{{cargo}}* is coming from more than one factory, we can consolidate it in our China warehouse before loading.\nThat usually kills the *per-shipment destination fees* and gives you one clean B/L.\nHow many suppliers are we talking about, roughly?", zh:"【男/商业】直接点出集货核心价值。"},
+        {role:"female", type:"personal", en:"Just a quick thought, *{{client}}* — are all the goods for this *{{ctr}}* coming from the same factory?\nIf not, we can *consolidate* them in China first. It takes a little extra time upfront, but it usually saves more than it costs.\nWould you like me to look into whether consolidating makes sense for your situation?", zh:"【女/散客】轻量插入。结尾判断题：“需不需要我帮你评估一下？”"},
+        {role:"female", type:"business", en:"*{{client}}*, if you're dealing with multiple suppliers, consolidation is definitely worth considering.\nHowever, it does add some warehouse dwell time in China. If your suppliers are on very different schedules, it might not be worth it.\nIs it safe to assume your suppliers are roughly on the same timeline?", zh:"【女/商业】诚实说明取舍。结尾判断题：“假设你的供应商时间线差不多，对吗？”"}
+      ]
+    }
+  ]
+},
+{
+  id:"s4", cn:"深度沟通·建立信任", en:"Trust Building",
+  desc:"用真实案例、透明流程建立差异化信任",
+  scenes:[
+    {
+      name:"Scene 4-A · 客户对“你们公司”不了解",
+      usage:"需要用“证据”而非“自夸”建立信任。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, I know a new name on WhatsApp doesn't mean much.\nThree things you can verify: we've been on this lane for *11 years*, we handle a Sydney client at *3×40HQ per month*, and our pricing is *broken down line by line*.\nIf any of that is useful, I'll send you the breakdown format.", zh:"【男/商业】提供可验证事实。"},
+        {role:"female", type:"personal", en:"*{{client}}*, I completely understand if you're feeling a bit cautious — there are so many forwarders out there, and we all look the same at first glance.\nJust so you know, we've been doing this for 11 years. Last year, when a client's cargo was partially lost, we actually *repurchased the missing items* and re-shipped them at our own cost.\nDoes that give you a little peace of mind?", zh:"【女/散客】共情。分享真实货损案例。结尾判断题：“这样能不能让你稍微放心一点？”"},
+        {role:"female", type:"business", en:"*{{client}}*, you are absolutely right to be cautious. I would be too if I were in your shoes.\nWhat I can offer you isn't a fancy brochure; it's *transparency*. If you ever want to know exactly where your money is going, just ask me, and I'll break it down.\nWould you be open to me sending over a sample breakdown so you can see how we structure things?", zh:"【女/商业】极致共情。结尾判断题：“愿不愿意让我发一份样本给你看看？”"}
+      ]
+    },
+    {
+      name:"Scene 4-B · 客户拿别家低价来压",
+      usage:"不能贬低对手，也不能立刻降价。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, I'm not going to pretend I'm always the cheapest — I'm not.\nWhat I can tell you is *what's inside the number*. If the other quote excludes *THC, DAFF standby, or empty return*, you're comparing an apple to a receipt with holes in it.\nSend me their quote if you're comfortable; I'll show you the gaps.", zh:"【男/商业】把竞争维度从价格转向透明度。"},
+        {role:"female", type:"personal", en:"That's a completely fair question, *{{client}}*. Cheaper is cheaper, and I would never insult your intelligence by pretending otherwise.\nI suppose the only thing I'd gently ask is: does their number include *delivery right to your actual door*, or just to a depot?\nIf theirs is genuinely door-to-door and cheaper, you should take it. But if it's not, would you mind if I showed you the difference?", zh:"【女/散客】尊重客户。结尾判断题：“介不介意我展示一下其中的差异？”"},
+        {role:"female", type:"business", en:"*{{client}}*, I hear you completely — price matters, and it would be silly of me to pretend it doesn't.\nWhat I'd gently ask is this: if their container gets held by DAFF, who picks up the phone? If it's a shared inbox, that cheap rate might end up costing you more in stress.\nWould you like me to take a look at their quote for you? I promise I won't badmouth them.", zh:"【女/商业】具象化痛点。结尾判断题：“需不需要我帮你看看他们的报价？”"}
+      ]
+    }
+  ]
+},
+{
+  id:"s5", cn:"多方案推荐", en:"Options",
+  desc:"标注取舍，把决策权交还客户",
+  scenes:[
+    {
+      name:"Scene 5-A · 客户在 DDP 与 P2P 之间犹豫",
+      usage:"需要把“取舍”说清楚。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, here's how I'd frame it:\n*Option A — DDP:* one number, we handle everything. Higher headline, zero admin.\n*Option B — P2P:* lower headline, but you own the AU-side charges.\nMost importers pick *A* for the first shipment. Which profile sounds more like you?", zh:"【男/商业】用 A/B 结构 + 行为参考。"},
+        {role:"female", type:"personal", en:"*{{client}}*, I can absolutely do either for you, but they do solve slightly different problems.\n*DDP* is wonderful if you just want to *forget the shipment exists* until it arrives at your door. *P2P* is better if you already have someone in {{dest}}.\nThere's no “better” option — it's just about which headache you'd rather not have. Would you say you'd prefer the completely hands-off option?", zh:"【女/散客】共情。结尾判断题：“首单是不是更倾向于全包（DDP）？”"},
+        {role:"female", type:"business", en:"*{{client}}*, both options are on the table for you. The main difference isn't just price — it's *who carries the risk*.\nWith DDP, we carry the destination risk. With P2P, you do, but you save on our margin.\nIf your business can absorb a surprise port invoice, P2P is great. But if you'd rather have peace of mind, DDP might be safer. Would you prefer to play it safe for this shipment?", zh:"【女/商业】提炼为风险承担。结尾判断题：“这一票是不是更倾向于稳妥一点？”"}
+      ]
+    },
+    {
+      name:"Scene 5-B · 客户需要 D2P 或 P2D",
+      usage:"精准匹配，不硬推全包。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, you mentioned you can handle the Australian side but need help getting it *out of China*. That's our *D2P* — we pick up from the factory and hand you a clean arrival notice.\nYou keep control of the AU broker.", zh:"【男/商业】精准命名服务类型。"},
+        {role:"female", type:"personal", en:"So you've already sorted the China side, *{{client}}* — you just need someone to grab it at *{{dest}}* and bring it to the door? That's our *P2D* service.\nIt's a very simple scope with a clean price, and no hidden “oh by the way” fees.\nWould it be helpful if I sent it over as a one-liner so you can easily compare it?", zh:"【女/散客】回应恐惧。结尾判断题：“需不需要我发个一句话简介给你？”"},
+        {role:"female", type:"business", en:"*{{client}}*, P2D is often a very smart choice for importers who already have a customs broker they trust.\nYou keep your broker relationship, and we just handle the wharf-to-door piece. It usually ends up being more cost-effective than full DDP.\nWould you like me to put this together as a standalone quote for you to review?", zh:"【女/商业】肯定客户。结尾判断题：“需不需要我整理成一个单独的报价？”"}
+      ]
+    }
+  ]
+},
+{
+  id:"s6", cn:"价格谈判", en:"Negotiation",
+  desc:"共情 → 事实 → 拆分 → 第三方案 → 人情外放 → 优惠申请",
+  scenes:[
+    {
+      name:"Scene 6-A · 客户说“太贵了”",
+      usage:"严格按六步逻辑推进。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, I hear you — and honestly, I'd be suspicious if you weren't pushing back. Everyone's watching costs right now.\nHere's the reality on this lane: *{{dest}} capacity has been tight*, and the port has been adding costs. We're not marking up for fun.\nIf I break the number down: *ocean freight*, *origin*, *destination THC*, *clearance*, *trucking*. The part people don't see is the *DAFF standby* and *empty return*.\nIf the full DDP is above your budget, I can restructure it: *P2D* gets you the same container and delivery, you keep the customs piece. It's a different number, not a worse service.\nAnd look — this is our first deal, and you've been straight with me. I'll treat it as a *new-client onboarding* and trim *USD 100–150* from our margin.\nIf that's still tight, tell me your ceiling and I'll *apply internally* for a one-off exception. I can't promise it, but I can put it in front of the right person.", zh:"【男/商业】完整六步链。严格按顺序推进。"},
+        {role:"female", type:"personal", en:"*{{client}}*, I completely understand. Nobody wants to feel like they're overpaying, especially right now.\nThe honest truth is, *{{dest}} is not the easiest port at the moment*, so the all-in number reflects real costs, not padding.\nLet me show you where the money goes. If I strip out the parts you can handle yourself, the number changes.\nIf you're okay with *port-to-door* instead of full DDP, you keep the customs control and I can bring the price down without touching the service quality.\nYou've been so easy to talk to, and I'd honestly rather build a long-term relationship with you than squeeze every penny. I'll put *USD 100–150* of our margin back on the table as a first-shipment gesture.\nIf your budget is still below that, please just tell me a number, and I'll take it to my manager and *try* to get it approved. Does this sound like a fair starting point?", zh:"【女/散客】极致人情味。结尾判断题：“这个起点听起来公平吗？”"},
+        {role:"female", type:"business", en:"*{{client}}*, I really appreciate you being so direct with me about the price — it saves us both time.\nLet me be equally direct: *{{dest}} is a tight port right now*, and the quote reflects that reality. I'm not padding it, and I'm not going to apologise for it either.\nWhat I can do is restructure things. Moving to *P2D* keeps the same container and delivery, but you own the customs piece. That's a real saving, not a discount trick.\nAnd because I really value the idea of working with you, I'll put *USD 100–150* of our margin back on the table.\nIf your ceiling is still lower, give me the number, and I'll *take it upstairs*. Would you be open to letting me try?", zh:"【女/商业】态度坚定但委婉。结尾判断题：“愿不愿意让我去试一试？”"}
+      ]
+    },
+    {
+      name:"Scene 6-B · 客户直接给了一个“目标价”",
+      usage:"先接住目标，再拆解差距。",
+      lines:[
+        {role:"male", type:"business", en:"Thanks for being direct, *{{client}}* — that makes my job easier.\nYour number isn't crazy. The gap is mostly in the *destination side*.\nI can't hit it with full DDP, but I can likely hit it with *P2D + your broker*. Would you like me to run that version?", zh:"【男/商业】先认可，再拆解。"},
+        {role:"female", type:"personal", en:"*{{client}}*, I really appreciate you telling me the number instead of just walking away.\nLet me be completely straight with you: full DDP at that level isn't something I can do without cutting corners I'm not willing to cut.\nBut if we move the *customs and delivery* to your side, there's a real chance we can meet you near there. Would you like me to try and put some numbers together for that?", zh:"【女/散客】建立坦诚。结尾判断题：“需不需要我试着按这个方向算算看？”"},
+        {role:"female", type:"business", en:"*{{client}}*, I'll be completely honest with you: your target is quite tight for full DDP, but it's not impossible if we change the structure.\nThere are two levers we can pull: *vessel choice* and *destination scope*. If we pull both, we can get very close.\nIs that a trade you'd be comfortable making, or is the number non-negotiable for you?", zh:"【女/商业】展示专业。结尾判断题：“你愿意做这种取舍吗？”"}
+      ]
+    }
+  ]
+},
+{
+  id:"s7", cn:"预成交·信息对接", en:"Pre-Closing",
+  desc:"把“意向”固化为“可操作信息”",
+  scenes:[
+    {
+      name:"Scene 7-A · 客户说“OK / Sounds good”，需要收口",
+      usage:"立刻用清单把对话推进到可执行状态。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, great — let's lock it in properly.\nI'll need four things to move from “quote” to “booking”:\n1) *Shipper name + address*\n2) *Consignee name + address*\n3) *Commercial invoice + packing list* (draft is fine)\n4) *Cargo ready date*.\nSend whatever you have now; I'll start the booking file.", zh:"【男/商业】编号清单拆解。"},
+        {role:"female", type:"personal", en:"That's wonderful, *{{client}}* — I'm so glad we're moving forward! I'll get the ball rolling on my end right away.\nThe only things I need from you right now are a *photo or PDF of the commercial invoice* and roughly when the goods will be *ready for pickup*.\nPlease don't worry about getting everything perfect right now. Would it be alright if we started with just the draft invoice?", zh:"【女/散客】提供情绪价值。结尾判断题：“先用草稿发票开始可以吗？”"},
+        {role:"female", type:"business", en:"*{{client}}*, I'm really glad we're aligned. Let's turn this into a booking so you can relax a bit.\nTo move things along efficiently, I'll just need the *shipper/consignee details*, *invoice*, and *cargo ready date*.\nWould you like me to send over a simple checklist so you don't miss anything?", zh:"【女/商业】展现人情味。结尾判断题：“需不需要我发个简单的清单给你？”"}
+      ]
+    },
+    {
+      name:"Scene 7-B · 客户犹豫，说“我再想想 / 等等”",
+      usage:"不能用“好的等你”结束对话。",
+      lines:[
+        {role:"male", type:"business", en:"No pressure, *{{client}}* — but can I ask what you're weighing up?\nIf it's the *total cost*, I can restructure. If it's the *transit time*, I can show you the schedule.\nI'd rather solve the real hesitation than keep sending quotes into the void.", zh:"【男/商业】拆解犹豫原因。"},
+        {role:"female", type:"personal", en:"Of course, *{{client}}* — please take your time. It's a big decision, and I'd rather you feel completely comfortable.\nI won't chase you, but would you mind if I asked if there's a *specific detail* making you pause?\nIs it okay if I check in with you next week, just to see if anything has changed?", zh:"【女/散客】消除压力。结尾判断题：“下周再问候一下可以吗？”"},
+        {role:"female", type:"business", en:"*{{client}}*, that's completely fine. A rushed decision is rarely a good one.\nI just want to make sure I haven't missed anything. Is there something I *haven't* addressed that's holding you back?\nWould you be willing to share what's on your mind?", zh:"【女/商业】主动承担。结尾判断题：“愿不愿意和我分享一下你的顾虑？”"}
+      ]
+    }
+  ]
+},
+{
+  id:"s8", cn:"订舱安排", en:"Booking",
+  desc:"每一步给客户确定性",
+  scenes:[
+    {
+      name:"Scene 8-A · 文件齐备，正式提交订舱",
+      usage:"告知订舱动作、预计 S/O 时间。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, docs received — I've submitted the booking.\nExpected *S/O within 1 working day*. Once I have it, I'll send you the *cut-off dates* and *VGM instructions* in one message.\nIf the factory needs a *pickup window*, tell me now.", zh:"【男/商业】明确 S/O 时效。"},
+        {role:"female", type:"personal", en:"All set, *{{client}}* — your booking request is safely in. You can relax a little now.\nI'll keep a close eye on it and message you the moment the *S/O comes through*.\nIn the meantime, there's absolutely nothing for you to do. Is that okay with you?", zh:"【女/散客】提供安心感。结尾判断题：“这样可以吗？”"},
+        {role:"female", type:"business", en:"*{{client}}*, your booking is safely in with the carrier. I'll confirm the *S/O* within 1 working day.\nOne little thing I want to flag now: *VGM submission* usually needs to be done before cut-off. Would you like me to handle it for you, or will your factory provide the weight?", zh:"【女/商业】主动提出VGM责任。结尾判断题：“需不需要我帮你处理VGM？”"}
+      ]
+    },
+    {
+      name:"Scene 8-B · 订舱后出现延误/爆舱",
+      usage:"必须主动、透明。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, a heads-up rather than a surprise: the carrier has *rolled the booking*.\nYour new *ETD is [date]*, and I'm already holding space on the next available vessel as a backup.\nIf the delay breaks a delivery commitment, tell me now.", zh:"【男/商业】主动沟通，给出 backup。"},
+        {role:"female", type:"personal", en:"Hi *{{client}}*, I'm so sorry to bother you with a small hiccup — the ship on your lane got pushed by a few days.\nI know that's not what you want to hear, and I really apologize. The good news is, your container is still in the queue, and I've already *re-confirmed space* on the next one.\nAre you okay with this new timeline?", zh:"【女/散客】展现同理心。结尾判断题：“这个新的时间线你能接受吗？”"},
+        {role:"female", type:"business", en:"*{{client}}*, I wanted to give you a quick heads-up before you hear it elsewhere: the carrier has *rolled the booking*.\nThe new *ETD is [date]*. I've already requested space on the next vessel just as a contingency.\nWould you like me to explore alternative options for you?", zh:"【女/商业】强调主动透明。结尾判断题：“需不需要我去探索一下其他备选方案？”"}
+      ]
+    }
+  ]
+},
+{
+  id:"s9", cn:"跟进·售后·转介绍", en:"Follow-up",
+  desc:"节奏化跟进，为复购和转介绍铺路",
+  scenes:[
+    {
+      name:"Scene 9-A · 航程中的主动更新",
+      usage:"建立“被服务感”。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, quick position update: your *{{ctr}}* is on the water, expected at *{{dest}}* around *[date]*.\nNo action needed from you. I'll send the *arrival notice* 5 days before ETA.", zh:"【男/商业】减少打扰感。"},
+        {role:"female", type:"personal", en:"Just a little update for you, *{{client}}* — your container is sailing as planned. Everything is on track.\nI'll pop back in when it's closer to *{{dest}}* with the arrival details. Until then, you can just enjoy the quiet :)", zh:"【女/散客】制造轻松感。"},
+        {role:"female", type:"business", en:"*{{client}}*, just a quick mid-voyage update: everything is on schedule, ETA at *{{dest}}* around [date].\nI'm already preparing the *arrival notice* in the background so there's no last-minute scramble.\nWould you like me to loop your broker in directly?", zh:"【女/商业】展示前置准备。结尾判断题：“需不需要我把你的清关行拉进沟通？”"}
+      ]
+    },
+    {
+      name:"Scene 9-B · 交付后转介绍 / 复购钩子",
+      usage:"在客户满意度最高点提出。",
+      lines:[
+        {role:"male", type:"business", en:"*{{client}}*, hope the *{{cargo}}* landed in good shape.\nIf the next shipment is on your mind, send me a one-liner and I'll have a *returning-client rate* ready.\nAnd if you know anyone tired of chasing their forwarder, I'd appreciate the intro.", zh:"【男/商业】复购+转介绍。"},
+        {role:"female", type:"personal", en:"*{{client}}*, now that everything is delivered — was there anything that annoyed you along the way?\nI'm not fishing for a compliment; I'm genuinely asking because I want the second shipment to be even smoother.\nAnd if you ever want to do this again, just message me “same as last time”. Would that make things easier for you?", zh:"【女/散客】展示真诚。结尾判断题：“这样会不会让你更方便？”"},
+        {role:"female", type:"business", en:"*{{client}}*, I've just seen the delivery confirmation — thank you so much for trusting us. It's been a pleasure.\nIf your next shipment is on the horizon, I can *pre-book space* and hold a returning-client rate for you.\nAnd if you have colleagues tired of opaque pricing, would you feel comfortable recommending us to anyone?", zh:"【女/商业】展现人情味。结尾判断题：“你愿意把我们推荐给别人吗？”"}
+      ]
+    }
+  ]
+}
+];
+
+let state = { role:"female", type:"personal" };
+const VARS = ["client","me","origin","dest","ctr","cargo"];
+
+function buildNav(){
+  const nav = document.getElementById("navList");
+  nav.innerHTML = SOP.map((s,i)=>`
+    <div class="nav-item ${i===0?'active':''}" data-id="${s.id}" onclick="scrollToSop('${s.id}', this)">
+      <span class="idx">${String(i+1).padStart(2,'0')}</span>
+      <span>${s.en}</span>
+      <span class="cn">${s.cn}</span>
+    </div>
+  `).join("");
+}
+
+function scrollToSop(id, el){
+  document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
+  el.classList.add("active");
+  const target = document.getElementById("block-"+id);
+  if(target) target.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function getVals(){
+  const v = {};
+  VARS.forEach(k=>{
+    const input = document.getElementById("v-"+k);
+    v[k] = input && input.value.trim() ? input.value.trim() : "{{"+k+"}}";
+  });
+  return v;
+}
+
+function renderAll(){
+  const vals = getVals();
+  const stage = document.getElementById("stage");
+  stage.innerHTML = "";
+  let total = 0;
+
+  SOP.forEach(sop=>{
+    const block = document.createElement("div");
+    block.className = "scene-block";
+    block.id = "block-" + sop.id;
+
+    let html = `<div class="scene-head">
+      <span class="sn">${sop.id.toUpperCase()}</span>
+      <h3>${sop.cn} · ${sop.en}</h3>
+      <span class="usage">${sop.desc}</span>
+    </div>`;
+
+    sop.scenes.forEach(scene=>{
+      const lines = scene.lines.filter(l => l.role === state.role && l.type === state.type);
+      
+      if(lines.length === 0) return;
+
+      html += `<div class="scene-divider">${scene.name}</div>
+      <div class="scene-usage">▸ ${scene.usage}</div>`;
+
+      lines.forEach((line, idx)=>{
+        total++;
+        let en = line.en;
+        VARS.forEach(k=>{
+          const re = new RegExp("\\{\\{"+k+"\\}\\}","g");
+          en = en.replace(re, `<span class="var">${vals[k]}</span>`);
+        });
+        en = en.replace(/\*([^*]+)\*/g, '<span class="wa-bold">$1</span>');
+
+        html += `<div class="card">
+          <button class="copy-btn" onclick="copyCard(this)">COPY</button>
+          <div class="meta">
+            <span class="tag dark">${state.role==="male"?"MALE":"FEMALE"}</span>
+            <span class="tag gold">${state.type==="business"?"BUSINESS":"PERSONAL"}</span>
+            <span class="tag">#${String(idx+1).padStart(2,'0')}</span>
+          </div>
+          <div class="en">${en}</div>
+          <div class="zh">${line.zh}</div>
+        </div>`;
+      });
+    });
+
+    block.innerHTML = html;
+    stage.appendChild(block);
+  });
+
+  if(total===0){
+    stage.innerHTML = `<div style="padding:60px;text-align:center;color:#999;font-size:16px;">数据加载中或暂无对应话术，请刷新重试。</div>`;
+  }
+}
+
+function copyCard(btn){
+  const card = btn.closest(".card");
+  const enEl = card.querySelector(".en");
+  let raw = enEl.innerHTML;
+  raw = raw.replace(/<span class="wa-bold">([^<]*)<\/span>/g, '*$1*');
+  raw = raw.replace(/<span class="var">([^<]*)<\/span>/g, '$1');
+  const tmp = document.createElement("div");
+  tmp.innerHTML = raw;
+  const text = tmp.textContent;
+
+  const done = ()=>{
+    btn.textContent = "COPIED";
+    btn.classList.add("ok");
+    setTimeout(()=>{btn.textContent="COPY";btn.classList.remove("ok");}, 1800);
+  };
+
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>{
+      fallbackCopy(text); done();
+    });
+  } else {
+    fallbackCopy(text); done();
+  }
+}
+
+function fallbackCopy(text){
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try{document.execCommand("copy");}catch(e){}
+  document.body.removeChild(ta);
+}
+
+function setRole(r){
+  state.role = r;
+  document.querySelectorAll('[data-role]').forEach(p=>{
+    p.classList.toggle("on", p.dataset.role === r);
+  });
+  renderAll();
+}
+function setType(t){
+  state.type = t;
+  document.querySelectorAll('[data-type]').forEach(p=>{
+    p.classList.toggle("on", p.dataset.type === t);
+  });
+  renderAll();
+}
+
+buildNav();
+renderAll();
+</script>
+</body>
+</html>
